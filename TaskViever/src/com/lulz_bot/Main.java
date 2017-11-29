@@ -7,44 +7,23 @@ import java.lang.management.ManagementFactory;
 public class Main {
     public static void main(String[] args) {
         try {
-            String line;
-            Process process = Runtime.getRuntime().exec(System.getenv("windir") +"\\system32\\"+"tasklist.exe");
-            BufferedReader input =
-                    new BufferedReader(new InputStreamReader(process.getInputStream(), "Cp866"));
-            while ((line = input.readLine()) != null) {
-                //System.out.print(p.info().user().get());
-                System.out.println(line);
-            }
+            int used_ram = PerformanceMonitor.getUsedRam();
+            int total_ram = PerformanceMonitor.getTotalRam();
+            int available_ram = PerformanceMonitor.getAvailableRam();
+            int progress = (int)(used_ram / (total_ram / 100) / 10);
+            int cpu_load = PerformanceMonitor.getCpuLoad();
 
-            OperatingSystemMXBean mbean =
-                    (com.sun.management.OperatingSystemMXBean)
-                            ManagementFactory.getOperatingSystemMXBean();
-            long available_ram = mbean.getFreePhysicalMemorySize();
-            long total_ram = mbean.getTotalPhysicalMemorySize();
-            long used_ram = (total_ram - available_ram);
-            available_ram /= 1048576;
-            total_ram /= 1048576;
-            used_ram /= 1048576;
+            PerformanceMonitor.getProcesses();
+
+            System.out.println("========================= ======== ================ =========== ============");
+            System.out.println(total_ram + " MB total RAM.");
             System.out.println(used_ram + " MB of RAM used.");
             System.out.println(available_ram + " MB of RAM available.");
 
-            long pb = (used_ram / (total_ram / 100) / 10);
-            char[] progressBar = new char[12];
-
-            for (int i = 0; i < progressBar.length; i++) {
-                if (i == 0) progressBar[i] = '[';
-                if (i == 11) progressBar[i] = ']';
-                if (i != 0 && i != 11)
-                {
-                    if (i <= pb)
-                        progressBar[i] = '|';
-                    else
-                        progressBar[i] = '-';
-                }
-                System.out.print(progressBar[i]);
-            }
+            PerformanceMonitor.drawProgressBar(progress);
+            
             System.out.print(" (" + used_ram / ((total_ram) / 100) + "% RAM usage)");
-            input.close();
+            System.out.println(cpu_load + "% (CPU usage)");
         } catch (Exception err) {
             err.printStackTrace();
         }
