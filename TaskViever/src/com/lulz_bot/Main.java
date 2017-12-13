@@ -18,7 +18,7 @@ public class Main {
 
             PerformanceMonitor.drawProgressBar(progress);
 
-            System.out.print(" (" + used_ram / ((total_ram) / 100) + "% RAM usage)");
+            System.out.print(" (" + used_ram / ((total_ram) / 100) + "% RAM usage)\n");
             System.out.println("========================= ======== ================ =========== ============");
             
             System.out.println(cpu_load + "% (CPU usage)");
