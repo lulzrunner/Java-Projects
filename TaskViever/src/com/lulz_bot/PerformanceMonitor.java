@@ -81,4 +81,9 @@ public class PerformanceMonitor {
             System.out.print(progressBar[i]);
         }
     }
+
+    public static void getProcessInfo()
+    {
+
+    }
 }
